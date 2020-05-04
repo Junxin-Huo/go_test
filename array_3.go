@@ -23,5 +23,5 @@ func getAverage(arr []int, size int) float32 {
 
     avg = float32(sum) / float32(size)
 
-    return avg;
+    return avg
 }
