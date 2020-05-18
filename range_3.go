@@ -5,4 +5,8 @@ func main(){
     for i,num := range nums {
         fmt.Printf("索引是%d,长度是%d\n",i, num)
     }
+
+    for i := range nums {
+        fmt.Printf("%d\n",i)
+    }
 }
