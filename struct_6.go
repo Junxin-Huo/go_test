@@ -5,25 +5,37 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"time"
 )
 
 func main() {
-	now := time.Now()
 	typ := reflect.StructOf([]reflect.StructField{
 		{
 			Name: "Height",
 			Type: reflect.TypeOf(float64(0)),
-			Tag:  `json:"height"`,
+			Tag:  `json:"Height"`,
 		},
 		{
 			Name: "Age",
 			Type: reflect.TypeOf(int(0)),
-			Tag:  `json:"age"`,
+			Tag:  `json:"Age"`,
+		},
+		{
+			Name: "Data",
+			Type: reflect.StructOf([]reflect.StructField{
+				{
+					Name: "Height",
+					Type: reflect.TypeOf(float64(0)),
+					Tag:  `json:"Height"`,
+				},
+				{
+					Name: "Age",
+					Type: reflect.TypeOf(int(0)),
+					Tag:  `json:"Age"`,
+				},
+			}),
+			Tag: `json:"Data"`,
 		},
 	})
-	sub := time.Now().Sub(now)
-	fmt.Println(sub)
 
 	v := reflect.New(typ).Elem()
 	v.Field(0).SetFloat(0.4)
@@ -38,16 +50,10 @@ func main() {
 	fmt.Printf("value: %+v\n", s)
 	fmt.Printf("json:  %s", w.Bytes())
 
-	r := bytes.NewReader([]byte(`{"height":1.5,"age":10}`))
+	r := bytes.NewReader([]byte(`{"height":1.5,"age":10, "Data":{"Height":100, "Age":333}}`))
 	if err := json.NewDecoder(r).Decode(s); err != nil {
 		panic(err)
 	}
 	fmt.Printf("value: %+v\n", s)
 
-}
-
-func CreateStruct(fields []reflect.StructField) reflect.Value {
-	var structType reflect.Type
-	structType = reflect.StructOf(fields)
-	return reflect.Zero(structType)
 }
